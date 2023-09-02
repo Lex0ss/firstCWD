@@ -54,15 +54,22 @@ def signup(request):
             password = form.cleaned_data['password1']
             
             # cleaned_data accede al JSON que tiene los datos de el formulario y los hace accesible con claves entre corchetes
+            
             user = authenticate(username = username, password = password)
             login(request, user)
             messages.success(request, 'You have successfully registered. Welcome!!')
             return redirect('home')
     else:
+        
         form = SignUpForm()
         return render(request, 'website/register.html', {'form' : form})
     
-    return render(request, 'website/register.html', {'form' : form})
+    print(request.method)
     
-        
+    return render(request, 'website/register.html', {'form' : form})
+    # Entonces, la razon de este ultimo render es cuando sucedan errores. Debidos a que la logica de esta vista no gestiona las excepciones, si no que es el formulario
+    # el que lo hace, entonces en caso de que exista una excepcion. Recuerda que is_valid() comprueba que no existan excepciones en el formulario, cuando una condicion
+    # no se cumple dentro de un bloque, entonces el flujo de el codigo sale de este bloque, entonces, como is_valid() comprueba 1 por 1 hasta el final, cuando se da cuenta
+    # que al menos hubo campo que no cumplio, entonces la condicion no se cumple, y el flujo sale de el bloque de el if de mas alto nivel, y como los errores son 
+    # guardados por el formulario, entonces, esta ultima renderizacion tomara esos errores guardados y los imprimira en la plantilla segun la logica especificada alli
             
