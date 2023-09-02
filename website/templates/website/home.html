@@ -4,29 +4,29 @@
 
 <div class="col-md-6 offset-md-3">
 
-{% if user.is_authenticated %}
+  {% if user.is_authenticated %}
 
-<h1>Hello world!!</h1>
+  <h1>Hello world!!</h1>
 
-{%else%}
+  {%else%}
 
-<h1>Login</h1>
-<br/>
-<!-- br se usa para saltos de linea -->
-<form method="POST" action="{%url 'home'%}">
-    {%csrf_token%}
+  <h1>Login</h1>
+  <br/>
+  <!-- br se usa para saltos de linea -->
+  <form method="POST" action="{%url 'home'%}">
+      {%csrf_token%}
 
-    <form>
-        <div class="mb-3">
-          <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username" placeholder="Username" required>
-        <!-- Placeholder es un atributo dentro de un campo de input en el cual su valor sera mostrado dentro de el input antes de que se seleccione -->
-        </div>
-        <div class="mb-3">
-          <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password" required>
-          <br/>
-        <button type="submit" class="btn btn-secondary">Login</button>
-      </form>
-</form>
+      <form>
+          <div class="mb-3">
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="username" placeholder="Username" required>
+          <!-- Placeholder es un atributo dentro de un campo de input en el cual su valor sera mostrado dentro de el input antes de que se seleccione -->
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Password" required>
+            <br/>
+          <button type="submit" class="btn btn-secondary">Login</button>
+        </form>
+  </form>
 
 </div>
 
