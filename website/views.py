@@ -1,10 +1,15 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
 from website.forms import SignUpForm
+from .models import Record
+
 
 def home(request):
+    records = Record.objects.all()
+    
+    
+    
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -24,7 +29,7 @@ def home(request):
             # plantilla con {{}} podra estar disponible para verse en el Frontend
             return redirect('home')
     else:
-        return render(request, 'website/home.html')
+        return render(request, 'website/home.html', {'records' : records})
             
 # def login_user(request):
 #     return render(request, 'website/home.html')
@@ -73,3 +78,10 @@ def signup(request):
     # que al menos hubo campo que no cumplio, entonces la condicion no se cumple, y el flujo sale de el bloque de el if de mas alto nivel, y como los errores son 
     # guardados por el formulario, entonces, esta ultima renderizacion tomara esos errores guardados y los imprimira en la plantilla segun la logica especificada alli
             
+def customer_record(request, pk):
+    if request.user.is_authenticated:
+        customer_record = Record.objects.get(id = pk)
+        return render(request, 'website/record.html', {'customer_record' : customer_record})
+    else:
+        messages.error(request, 'You need to have an account')
+        return redirect('home')
