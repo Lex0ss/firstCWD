@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from website.forms import SignUpForm
+from website.forms import AddRecordForm, SignUpForm
 from .models import Record
 
 
@@ -84,4 +84,42 @@ def customer_record(request, pk):
         return render(request, 'website/record.html', {'customer_record' : customer_record})
     else:
         messages.error(request, 'You need to have an account')
+        return redirect('home')
+    
+
+def delete_record(request, pk):
+    if request.user.is_authenticated:
+        deleted_record = Record.objects.get(id = pk)
+        deleted_record.delete()
+        messages.success(request, 'Record deleted successfuly')
+        return redirect('home')
+    else:
+        messages.error(request, 'You must be login to delete a record')
+        redirect('home')
+        
+def add_record(request):
+    form = AddRecordForm(request.POST or None)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            if form.is_valid():
+                add_record = form.save()
+                messages.success(request, 'Record added...')
+                return redirect('home')
+        return render(request, 'website/add_record.html', {'form' : form})
+    else:
+        messages.error(request, 'You should be logged in...')
+        return redirect('home')
+    
+def update_record(request, pk):
+    if request.user.is_authenticated:
+        current_record = Record.objects.get(id = pk)
+        form = AddRecordForm(request.POST or None, instance=current_record)
+        #Crea el formulario que se va a cargar, donde se le cargan los campos de el registro en donde te encuentras respectivamente
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Record has been updated :)')
+            return redirect('home')
+        return render(request, 'website/update_record.html', {'form' : form})
+    else:
+        messages.error(request, 'You must be logged...')
         return redirect('home')
